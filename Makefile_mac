@@ -1,0 +1,11 @@
+# @brief   hexdecode Makefile for Mac OS X.
+# @author  eel3
+# @date    2013/11/07
+#
+# @note
+# - LLVM 4.2 (clang-425.0.27, Xcode 4.6.1) on Mac OS X 10.8.4
+
+CPPFLAGS       := -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/
+TARGET_ARCH    := -mmacosx-version-min=10.6 -arch i386 -arch x86_64
+
+include ./Makefile

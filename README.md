@@ -1,4 +1,4 @@
 hexdecode
 =========
 
-command tool to decode hex-dumped text.
+command line tool to decode hex-dumped text.
