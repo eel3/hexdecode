@@ -12,7 +12,9 @@ Set up
 ------
 
 All you have to do is compile hexdecode.c by ANSI C compiler.
-You can use make(1) if you have gcc (include MinGW) or clang.
+
+You can use Makefiles if you have GNU make and clang/gcc (include MinGW).
+You can also use Makefile_vc_nmake if you have Microsoft(R) C/C++ Compiler and NMAKE (experimental).
 
 Usage
 -----

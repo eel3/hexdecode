@@ -1,0 +1,16 @@
+# @brief   hexdecode Makefile for Visual C++ and NMAKE.
+# @author  eel3
+# @date    2014/06/10
+#
+# @note
+# - Visual Studio 2005 Professional SP1
+# - Visual Studio 2010 Professional SP1
+
+app         = hexdecode
+CFLAGS      = /GS /W4 /MT /DWIN32
+
+all: $(app).exe
+	
+
+clean:
+	del $(app).exe $(app).obj
