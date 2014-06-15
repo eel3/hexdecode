@@ -1,6 +1,6 @@
 /* ********************************************************************** */
 /**
- * @brief   command line tool to decode hex-dumped text.
+ * @brief   Command line tool to decode hex-dumped text.
  * @author  eel3
  * @date    2014/06/05
  *

@@ -1,7 +1,7 @@
 hexdecode
 =========
 
-command line tool to decode hex-dumped text.
+Command line tool to decode hex-dumped text.
 
 License
 -------
