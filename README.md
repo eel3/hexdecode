@@ -8,6 +8,13 @@ License
 
 zlib License.
 
+Target environments
+-------------------
+
+Windows, Linux, Mac OS X.
+
+hexdecode is written in ANSI C89, and so probably worked in other OS.
+
 Set up
 ------
 
