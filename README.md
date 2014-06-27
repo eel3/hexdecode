@@ -13,7 +13,7 @@ Target environments
 
 Windows, Linux, Mac OS X.
 
-hexdecode is written in ANSI C89, and so probably work fine on other OS.
+hexdecode is written in ANSI C89, and so probably works fine on other OS.
 
 Set up
 ------
