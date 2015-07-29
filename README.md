@@ -18,13 +18,11 @@ hexdecode is written in ANSI C89, and so probably works fine on other OS.
 Set up
 ------
 
-All you have to do is compile hexdecode.c by ANSI C compiler.
-
-You can use Makefiles if you have GNU make and clang/gcc (include MinGW).
-You can also use Makefile_vc_nmake if you have Microsoft(R) C/C++ Compiler and NMAKE (experimental).
+1. Compile hexdecode.c. Use make and Makefile.
+2. Put hexdecode in a directory registered in PATH.
 
 | toolset                            | Makefile                 |
-|:-----------------------------------|:------------------------:|
+|:-----------------------------------|:-------------------------|
 | Linux                              | Makefile                 |
 | Mac OS X                           | Makefile\_mac            |
 | MinGW/TDM-GCC (with GNU make)      | Makefile\_mingw          |
