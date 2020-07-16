@@ -2,7 +2,7 @@
 /**
  * @brief   Command line tool to decode hex-dumped text.
  * @author  eel3
- * @date    2014/09/18
+ * @date    2020/06/21
  *
  * @par Compilers
  *   - GCC 4.6.3 (Ubuntu 12.04.3 LTS)
@@ -56,6 +56,14 @@ enum {
 
 
 /* ---------------------------------------------------------------------- */
+/* Variable */
+/* ---------------------------------------------------------------------- */
+
+/** The program name. */
+static const char *program_name;
+
+
+/* ---------------------------------------------------------------------- */
 /* Function-like macro */
 /* ---------------------------------------------------------------------- */
 
@@ -95,6 +103,21 @@ my_basename(const char * const name)
 
 	bn = strrchr(name, PATH_SEP);
 	return (bn == NULL) ? name : bn+1;
+}
+
+/* ====================================================================== */
+/**
+ * @brief  Show usage,
+ *
+ * @param[in,out] *out  Output stream.
+ */
+/* ====================================================================== */
+static void
+usage(FILE * const out)
+{
+	assert(out != NULL);
+
+	(void) fprintf(out, "usage: %s [-h] [file ...]\n", program_name);
 }
 
 /* ====================================================================== */
@@ -198,12 +221,7 @@ main(int argc, char *argv[])
 {
 	int err, retval;
 
-	if ((argc == 2)
-		&& (STREQ(argv[1], "-h") || STREQ(argv[1], "--help")))
-	{
-		(void) fprintf(stderr, "usage: %s [-h|--help] [file ...]\n", my_basename(argv[0]));
-		return EXIT_FAILURE;
-	}
+	program_name = my_basename(argv[0]);
 
 #if defined(_WIN32) || defined(_WIN64)
 	errno = 0;
@@ -212,6 +230,35 @@ main(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 #endif /* defined(_WIN32) || defined(_WIN64) */
+
+	for (; (argc > 1) && (argv[1][0] == '-') && (argv[1][1] != '\0'); argc--, argv++) {
+		const char *p = &argv[1][1];
+
+		if (argv[1][1] == '-') {
+			p = &argv[1][2];
+
+			if (*p == '\0') {
+				argc--, argv++;
+				break;
+			} else if (STREQ(p, "help")) {
+				usage(stdout);
+				return EXIT_SUCCESS;
+			} else {
+				usage(stderr);
+				return EXIT_FAILURE;
+			}
+			continue;
+		}
+
+		do switch (*p) {
+		case 'h':
+			usage(stdout);
+			return EXIT_SUCCESS;
+		default:
+			usage(stderr);
+			return EXIT_FAILURE;
+		} while (*++p != '\0');
+	}
 
 	if (argc <= 1) {
 		err = hexdecode("(stdin)", stdin, stdout);
