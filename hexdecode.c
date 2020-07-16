@@ -117,7 +117,18 @@ usage(FILE * const out)
 {
 	assert(out != NULL);
 
-	(void) fprintf(out, "usage: %s [-h] [file ...]\n", program_name);
+	(void) fprintf(out, "usage: %s [-hv] [file ...]\n", program_name);
+}
+
+/* ====================================================================== */
+/**
+ * @brief  Show version number,
+ */
+/* ====================================================================== */
+static void
+version(void)
+{
+	(void) fprintf(stdout, "%s 2020-06-21\n", program_name);
 }
 
 /* ====================================================================== */
@@ -243,6 +254,9 @@ main(int argc, char *argv[])
 			} else if (STREQ(p, "help")) {
 				usage(stdout);
 				return EXIT_SUCCESS;
+			} else if (STREQ(p, "version")) {
+				version();
+				return EXIT_SUCCESS;
 			} else {
 				usage(stderr);
 				return EXIT_FAILURE;
@@ -253,6 +267,9 @@ main(int argc, char *argv[])
 		do switch (*p) {
 		case 'h':
 			usage(stdout);
+			return EXIT_SUCCESS;
+		case 'v':
+			version();
 			return EXIT_SUCCESS;
 		default:
 			usage(stderr);
