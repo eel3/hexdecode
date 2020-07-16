@@ -117,7 +117,7 @@ usage(FILE * const out)
 {
 	assert(out != NULL);
 
-	(void) fprintf(out, "usage: %s [-hv] [file ...]\n", program_name);
+	(void) fprintf(out, "usage: %s [-hv] [-o output] [file ...]\n", program_name);
 }
 
 /* ====================================================================== */
@@ -230,6 +230,8 @@ hexdecode(const char * const inname, FILE * const in, FILE * const out)
 int
 main(int argc, char *argv[])
 {
+	const char *output;
+	FILE *out;
 	int err, retval;
 
 	program_name = my_basename(argv[0]);
@@ -241,6 +243,8 @@ main(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 #endif /* defined(_WIN32) || defined(_WIN64) */
+
+	output = "-";
 
 	for (; (argc > 1) && (argv[1][0] == '-') && (argv[1][1] != '\0'); argc--, argv++) {
 		const char *p = &argv[1][1];
@@ -254,6 +258,14 @@ main(int argc, char *argv[])
 			} else if (STREQ(p, "help")) {
 				usage(stdout);
 				return EXIT_SUCCESS;
+			} else if (STREQ(p, "output")) {
+				if (argc < 3) {
+					usage(stderr);
+					return EXIT_FAILURE;
+				} else {
+					argc--, argv++;
+					output = argv[1];
+				}
 			} else if (STREQ(p, "version")) {
 				version();
 				return EXIT_SUCCESS;
@@ -268,6 +280,18 @@ main(int argc, char *argv[])
 		case 'h':
 			usage(stdout);
 			return EXIT_SUCCESS;
+		case 'o':
+			if (p[1] != '\0') {
+				output = &p[1];
+				p += strlen(output);
+			} else if (argc < 3) {
+				usage(stderr);
+				return EXIT_FAILURE;
+			} else {
+				argc--, argv++;
+				output = argv[1];
+			}
+			break;
 		case 'v':
 			version();
 			return EXIT_SUCCESS;
@@ -277,8 +301,17 @@ main(int argc, char *argv[])
 		} while (*++p != '\0');
 	}
 
+	if (STREQ(output, "-")) {
+		out = stdout;
+	} else if (errno = 0, (out = fopen(output, "wb")) == NULL) {
+		perror(output);
+		return EXIT_FAILURE;
+	} else {
+		/*EMPTY*/
+	}
+
 	if (argc <= 1) {
-		err = hexdecode("(stdin)", stdin, stdout);
+		err = hexdecode("(stdin)", stdin, out);
 		retval = (err < 0) ? EXIT_FAILURE : EXIT_SUCCESS;
 	} else {
 		int i;
@@ -299,7 +332,7 @@ main(int argc, char *argv[])
 				inname = argv[i];
 			}
 
-			err = hexdecode(inname, in, stdout);
+			err = hexdecode(inname, in, out);
 			if (err < 0) {
 				retval = EXIT_FAILURE;
 			}
@@ -312,6 +345,10 @@ main(int argc, char *argv[])
 				break;
 			}
 		}
+	}
+
+	if (out != stdout) {
+		(void) fclose(out);
 	}
 
 	return retval;
